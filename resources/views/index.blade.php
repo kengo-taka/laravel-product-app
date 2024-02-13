@@ -34,14 +34,12 @@
                     <dt>並び順</dt>
                     <dd>
                         <select name="sort" class="form-select">
-                            {{-- <option value="added_date">登録順</option>
-                            <option value="price_asc"{{ Request::get('sort') == 'price_asc' ? ' selected' : '' }}>価格の安い順
+                            <option value="added_date" {{ Request::get('sort') == 'added_date' ? 'selected' : '' }}>登録順
                             </option>
-                            <option value="price_desc"{{ Request::get('sort') == 'price_desc' ? ' selected' : '' }}>価格の高い順
-                            </option> --}}
-                            <option value="added_date" {{ Request::get('sort') == 'added_date' ? 'selected' : '' }}>登録順</option>
-                            <option value="price_asc" {{ Request::get('sort') == 'price_asc' ? 'selected' : '' }}>価格の安い順</option>
-                            <option value="price_desc" {{ Request::get('sort') == 'price_desc' ? 'selected' : '' }}>価格の高い順</option>
+                            <option value="price_asc" {{ Request::get('sort') == 'price_asc' ? 'selected' : '' }}>価格の安い順
+                            </option>
+                            <option value="price_desc" {{ Request::get('sort') == 'price_desc' ? 'selected' : '' }}>価格の高い順
+                            </option>
                         </select>
                     </dd>
                 </dl>
@@ -52,6 +50,10 @@
             <form onsubmit="return confirm('ログアウトしますか？')" action="{{ route('logout') }}" method="post">
                 @csrf
                 <button type="submit" class="btn btn-sm btn-dark">ログアウト</button>
+            </form>
+            <form action="{{ route('product.create') }}" method="get">
+                @csrf
+                <button type="submit" class="btn btn-sm btn-dark">作成</button>
             </form>
         </div>
         <div class="col-md-8 col-lg-9">
@@ -70,7 +72,7 @@
                     <tbody>
                         @foreach ($products as $product)
                             <tr>
-                                {{-- <td><a href="{{ route('products.edit', $product) }}">{{ $product->id }}</a></td> --}}
+                                <td><a href="{{ route('product.edit', $product) }}">{{ $product->id }}</a></td>
                                 <td>{{ $product->category->name }}</td>
                                 <td>{{ $product->maker }}</td>
                                 <td>{{ $product->name }}</td>

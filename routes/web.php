@@ -18,4 +18,9 @@ use \App\Http\Controllers\ProductController;
 
 Route::group(['middleware' => ['auth']], function () {
   Route::get('/', [ProductController::class, 'index'])->name('top');
+  Route::get('/create', [ProductController::class, 'create'])->name('product.create');
+  Route::post('/store', [ProductController::class, 'store'])->name('product.store');
+  Route::get('/{product}/edit', [ProductController::class, 'edit'])->name('product.edit');
+  Route::patch('/{product}/update', [ProductController::class, 'update'])->name('product.update');
+  Route::delete('/{product}/destroy', [ProductController::class, 'destroy'])->name('product.destroy');
 });

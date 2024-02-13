@@ -20,16 +20,15 @@ class ProductController extends Controller
         $max_price = $request->get('max_price');
         $sort = $request->get('sort');
 
-        // dd($request);
-        $query = Product::select('category_id', 'name', 'maker', 'price');
+        $query = Product::select('category_id', 'name', 'maker', 'price', 'id');
         if ($category_id) {
             $query->where('category_id', $category_id);
         }
 
-        if ($keyword) {
-            $query->where('name', 'LIKE', "%$keyword%")
-                ->orWhere('maker', 'LIKE', "%$keyword%");
-        }
+        // if ($keyword) {
+        //     $query->where('name', 'LIKE', "%$keyword%")
+        //         ->orWhere('maker', 'LIKE', "%$keyword%");
+        // }
 
         if ($keyword) {
             $query->where(function ($q) use ($keyword) {
@@ -59,6 +58,8 @@ class ProductController extends Controller
         $data = [
             "products" => $products,
         ];
+        // dd($data);
+
         return view("index", $data);
     }
 
@@ -69,7 +70,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        return view("product.create");
     }
 
     /**
@@ -80,7 +81,22 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $this->validate($request, [
+            'name' => 'required|max:255',
+            'maker' => 'required|max:255',
+            'price' => 'required|numeric|between:10,199.99',
+        ]);
+
+        // dd($request);
+        $product = new Product();
+        $product->name = $request->name;
+        $product->maker = $request->maker;
+        $product->price = $request->price;
+        $product->category_id = $request->category_id;
+        $product->save();
+
+        return redirect(route('top'));
     }
 
     /**
@@ -102,7 +118,8 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        //
+        $data = ['product' => $product];
+        return view("product.edit", $data);
     }
 
     /**
@@ -114,7 +131,22 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required|max:255',
+            'maker' => 'required|max:255',
+            'price' => 'required|numeric|between:10,199.99',
+        ]);
+
+        // dd($request);
+        // $product = new Product();
+        $product->name = $request->name;
+        $product->maker = $request->maker;
+        $product->price = $request->price;
+        $product->category_id = $request->category_id;
+        $product->save();
+                // dd($product);
+
+        return redirect(route('top', $product));
     }
 
     /**
@@ -125,6 +157,7 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        $product->delete();
+        return redirect(route('top'));
     }
 }
